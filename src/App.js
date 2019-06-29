@@ -13,6 +13,7 @@ class App extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.markAsDone = this.markAsDone.bind(this);
   }
 
   handleChange(event) {
@@ -41,17 +42,42 @@ class App extends Component {
       })
     } else {
       alert("You cannot add an empty task!!!");
-    }
-    
+    }   
+
     event.preventDefault();
   }
+
+  markAsDone(id) {
+    const {todoList} = this.state;
+    let doneTask = todoList.filter( todo => todo.id === id)[0];
+    let updatedList = Object.assign(
+      [],
+      todoList, doneTask.completed = !doneTask.completed,
+    )
+
+    this.setState({ todoList: updatedList});
+  }
+
   render() {
     const { input, todoList } = this.state;
-    const displayTodos = todoList.map( todo => 
-      <li key={todo.id}>
-        {todo.text} <button >Done</button>
-      </li>
-    );
+    const displayTodos = todoList.map( todo => {
+      if(todo.completed) {
+        return (
+          <li key={todo.id}>
+            <del>{todo.text}</del>
+            <button onClick={()=>this.markAsDone(todo.id)} >Completed</button>
+          </li>
+        )
+      } else {
+        return (
+          <li key={todo.id}>
+            {todo.text}
+            <button onClick={()=>this.markAsDone(todo.id)} >Mark As Done</button>
+          </li>
+
+        )
+      }
+    });
     return (
       <div className="App">
         <h2>Todo App with React and Redux</h2>
