@@ -70,8 +70,12 @@ class App extends Component {
   }
 
   handleDelete(id) {
+    const {todoList} = this.state;
+
+    const itemForDelete = todoList.filter( todo => todo.id === id)[0];
+    const updatedList = todoList.filter(todo => todo.id !== itemForDelete.id);
     
-    
+    this.setState({todoList: updatedList});
   }
 
   render() {
@@ -84,15 +88,19 @@ class App extends Component {
                           icon={faTrashAlt}
                         />
 
+      // Check state of todo item
+      // If completed, change button to an undo button
+      // Each todo has its own delete button
+     
       if(todo.completed) {
         return (
           <div key={todo.id} >
             <li  className="todoItem">
               <span>
-                <FontAwesomeIcon icon={faCheck} />
+                <FontAwesomeIcon icon={faCheck} className="markBtn" />
                 <del>{todo.text}</del></span>
 
-              <div>
+              <div className="actionBtns">
                 <Button 
                   handleClick={()=>this.toggleCompleted(todo.id)} 
                   icon={faUndo}
@@ -110,7 +118,7 @@ class App extends Component {
           <div key={todo.id}>
             <li  className="todoItem">
               <span>{todo.text}</span>
-              <div>
+              <div className="actionBtns">
                 <Button 
                   handleClick={()=>this.toggleCompleted(todo.id)}
                    icon={faCheckCircle}
