@@ -95,7 +95,7 @@ class App extends Component {
       if(todo.completed) {
         return (
           <div key={todo.id} >
-            <li  className="todoItem">
+            <div  className="todoItem">
               <span>
                 <FontAwesomeIcon icon={faCheck} className="markBtn" />
                 <del>{todo.text}</del></span>
@@ -109,14 +109,14 @@ class App extends Component {
 
                 {deleteBtn}
               </div>
-            </li>
+            </div>
 
           </div>
         )
       } else {
         return (
           <div key={todo.id}>
-            <li  className="todoItem">
+            <div  className="todoItem">
               <span>{todo.text}</span>
               <div className="actionBtns">
                 <Button 
@@ -127,7 +127,7 @@ class App extends Component {
 
                 {deleteBtn}
               </div>
-            </li>
+            </div>
           </div>
 
         )
