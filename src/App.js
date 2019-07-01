@@ -1,7 +1,15 @@
 import React, {Component} from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import { faTasks} from '@fortawesome/free-solid-svg-icons';
+import { 
+  faPlus, 
+  faCheckCircle, 
+  faTrashAlt,
+  faUndo,
+  faCheck,
+} from '@fortawesome/free-solid-svg-icons';
 import './App.css';
+
+
 
 class App extends Component {
   constructor(props) {
@@ -15,13 +23,14 @@ class App extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.markAsDone = this.markAsDone.bind(this);
+    this.toggleCompleted = this.toggleCompleted.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   handleChange(event) {
     this.setState({
       input: event.target.value,
-    })
+    });
   }
 
   handleSubmit( event ) {
@@ -42,35 +51,57 @@ class App extends Component {
         id: id + 1,
         input: "",
       })
-    } else {
-      alert("You cannot add an empty task!!!");
     }   
 
     event.preventDefault();
   }
 
-  markAsDone(id) {
+  toggleCompleted(id) {
     const {todoList} = this.state;
-    let doneTask = todoList.filter( todo => todo.id === id)[0];
-    let updatedList = Object.assign(
-      [],
-      todoList, doneTask.completed = !doneTask.completed,
-    )
 
-    this.setState({ todoList: updatedList});
+    const getTodo = todoList.filter(todo => todo.id === id)[0];
+    getTodo.completed = !getTodo.completed;
+
+    const updatedList = todoList.map( todo => {
+      return todo.id === getTodo.id ? getTodo : todo;
+    });
+
+    this.setState({todoList: updatedList});
+  }
+
+  handleDelete(id) {
+    
+    
   }
 
   render() {
-    const { input, todoList } = this.state;
+    const { input, todoList, } = this.state;
+
     const displayTodos = todoList.map( todo => {
+      const deleteBtn = <Button 
+                          handleClick={()=>this.handleDelete(todo.id)} 
+                          className="deleteBtn"
+                          icon={faTrashAlt}
+                        />
+
       if(todo.completed) {
         return (
           <div key={todo.id} >
             <li  className="todoItem">
-              <span><del>{todo.text}</del></span>
-              <button onClick={()=>this.markAsDone(todo.id)} >Completed</button>
+              <span>
+                <FontAwesomeIcon icon={faCheck} />
+                <del>{todo.text}</del></span>
+
+              <div>
+                <Button 
+                  handleClick={()=>this.toggleCompleted(todo.id)} 
+                  icon={faUndo}
+                  className="undoBtn"
+                />
+
+                {deleteBtn}
+              </div>
             </li>
-            <hr />
 
           </div>
         )
@@ -79,16 +110,26 @@ class App extends Component {
           <div key={todo.id}>
             <li  className="todoItem">
               <span>{todo.text}</span>
-              <button onClick={()=>this.markAsDone(todo.id)} >Mark As Done</button>
+              <div>
+                <Button 
+                  handleClick={()=>this.toggleCompleted(todo.id)}
+                   icon={faCheckCircle}
+                   className="markBtn"
+                />
+
+                {deleteBtn}
+              </div>
             </li>
-            <hr />
           </div>
 
         )
       }
     });
-    const output = displayTodos.length === 0 ?
-      <span id="default-text">Tasks will display Here!</span> : displayTodos
+
+    const output = displayTodos.length === 0 
+      ? <span id="default-text">Your tasks will appear here!</span> 
+      : displayTodos;
+
     return (
       <div className="App">
         <h2 id="title">Todo App with React and Redux</h2>
@@ -98,15 +139,18 @@ class App extends Component {
               <input 
                 type="text" 
                 value={input}
-                placeholder="New Task"
+                placeholder="Add a task"
                 onChange={this.handleChange}
               />
-              <button 
+
+              {/* Using button Component */}
+              <Button 
                 type="submit"
                 id="addBtn"
-              >
-                <FontAwesomeIcon icon={faTasks} />
-              </button>
+                disabled={input.length === 0 ? true : false}
+                icon={faPlus}
+              />
+
             </form>
           </div>
 
@@ -117,6 +161,21 @@ class App extends Component {
       </div>
     )
   }
+}
+
+
+function Button(props) {
+  return (
+    <button 
+      onClick={props.handleClick}
+      type={props.type}
+      className={props.className}
+      id={props.id}
+      disabled={props.disabled}
+    >
+      <FontAwesomeIcon icon={props.icon} />
+    </button>
+  )
 }
 
 export default App;
