@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import { faTasks} from '@fortawesome/free-solid-svg-icons';
 import './App.css';
 
 class App extends Component {
@@ -63,37 +65,53 @@ class App extends Component {
     const displayTodos = todoList.map( todo => {
       if(todo.completed) {
         return (
-          <li key={todo.id}>
-            <del>{todo.text}</del>
-            <button onClick={()=>this.markAsDone(todo.id)} >Completed</button>
-          </li>
+          <div key={todo.id} >
+            <li  className="todoItem">
+              <span><del>{todo.text}</del></span>
+              <button onClick={()=>this.markAsDone(todo.id)} >Completed</button>
+            </li>
+            <hr />
+
+          </div>
         )
       } else {
         return (
-          <li key={todo.id}>
-            {todo.text}
-            <button onClick={()=>this.markAsDone(todo.id)} >Mark As Done</button>
-          </li>
+          <div key={todo.id}>
+            <li  className="todoItem">
+              <span>{todo.text}</span>
+              <button onClick={()=>this.markAsDone(todo.id)} >Mark As Done</button>
+            </li>
+            <hr />
+          </div>
 
         )
       }
     });
+    const output = displayTodos.length === 0 ?
+      <span id="default-text">Tasks will display Here!</span> : displayTodos
     return (
       <div className="App">
-        <h2>Todo App with React and Redux</h2>
+        <h2 id="title">Todo App with React and Redux</h2>
         <div>
-          <form onSubmit={this.handleSubmit}>
-            <input 
-              type="text" 
-              value={input}
-              onChange={this.handleChange}
-            />
-            <button 
-              type="submit">Add</button>
-          </form>
+          <div id="inputForm">
+            <form onSubmit={this.handleSubmit}>
+              <input 
+                type="text" 
+                value={input}
+                placeholder="New Task"
+                onChange={this.handleChange}
+              />
+              <button 
+                type="submit"
+                id="addBtn"
+              >
+                <FontAwesomeIcon icon={faTasks} />
+              </button>
+            </form>
+          </div>
 
           <div id="display">
-            {displayTodos}
+            {output}
           </div>
         </div>
       </div>
