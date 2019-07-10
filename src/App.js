@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import store from './store';
+import { addTodo, deleteTodo } from './store';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import { 
   faPlus, 
@@ -17,8 +19,8 @@ class App extends Component {
 
     this.state = {
       input: "",
-      todoList: [],
-      id: 0,
+      // todoList: [],
+      id: 2,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -34,32 +36,26 @@ class App extends Component {
   }
 
   handleSubmit( event ) {
-    const {input, todoList, id} = this.state;
-
+    const {input, id} = this.state;
+    
     if(input !== "") {
-     let newTask = [
-       ...todoList,
-       {
-         text: input,
-         completed: false,
-         id,
-       }
-      ];
+      store.dispatch(
+        addTodo({
+          id,
+          text: input,
+          completed: false,
+        })
+      )
 
-      this.setState({
-        todoList: newTask,
-        id: id + 1,
-        input: "",
-      })
-    }   
-
+      this.setState({ input: "", id: id + 1});
+    }
     event.preventDefault();
   }
 
   toggleCompleted(id) {
     const {todoList} = this.state;
 
-    const getTodo = todoList.filter(todo => todo.id === id)[0];
+    const getTodo = store.getState().filter(todo => todo.id === id)[0];
     getTodo.completed = !getTodo.completed;
 
     const updatedList = todoList.map( todo => {
@@ -70,20 +66,16 @@ class App extends Component {
   }
 
   handleDelete(id) {
-    const {todoList} = this.state;
-
-    const itemForDelete = todoList.filter( todo => todo.id === id)[0];
-    const updatedList = todoList.filter(todo => todo.id !== itemForDelete.id);
-    
-    this.setState({todoList: updatedList});
+    store.dispatch( deleteTodo(id) );
   }
 
   render() {
-    const { input, todoList, } = this.state;
+    const { input, } = this.state;
 
-    const displayTodos = todoList.map( todo => {
+
+    const displayTodos = store.getState().map( todo => {
       const deleteBtn = <Button 
-                          handleClick={()=>this.handleDelete(todo.id)} 
+                          handleClick={()=>this.handleDelete(todo.id)}
                           className="deleteBtn"
                           icon={faTrashAlt}
                         />
