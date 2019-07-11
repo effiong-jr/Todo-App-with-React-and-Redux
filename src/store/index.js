@@ -8,11 +8,16 @@ import {
 const initialState = [
     {
         id: 0,
+        text: "Go to the gym my 8am",
+        completed: true,
+    },
+    {
+        id: 1,
         text: "Go shopping by 1pm",
         completed: false,
     }, 
     {
-        id: 1,
+        id: 2,
         text: "Practice Coding by 10pm",
         completed: false,
     }
