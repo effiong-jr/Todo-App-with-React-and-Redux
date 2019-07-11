@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import store from './store';
-import { addTodo, deleteTodo } from './store';
+import { addTodo, deleteTodo, toggleTodo } from './actionCreators';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import { 
   faPlus, 
@@ -53,16 +53,17 @@ class App extends Component {
   }
 
   toggleCompleted(id) {
-    const {todoList} = this.state;
+    store.dispatch(toggleTodo(id));
+    // const {todoList} = this.state;
 
-    const getTodo = store.getState().filter(todo => todo.id === id)[0];
-    getTodo.completed = !getTodo.completed;
+    // const getTodo = store.getState().filter(todo => todo.id === id)[0];
+    // getTodo.completed = !getTodo.completed;
 
-    const updatedList = todoList.map( todo => {
-      return todo.id === getTodo.id ? getTodo : todo;
-    });
+    // const updatedList = todoList.map( todo => {
+    //   return todo.id === getTodo.id ? getTodo : todo;
+    // });
 
-    this.setState({todoList: updatedList});
+    // this.setState({todoList: updatedList});
   }
 
   handleDelete(id) {

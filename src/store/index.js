@@ -1,6 +1,9 @@
 import { createStore } from 'redux';
-import { ADD_TODO, DELETE_TODO } from '../actionTypes';
-
+import { 
+    ADD_TODO, 
+    DELETE_TODO, 
+    TOGGLE_TODO, 
+} from '../actionTypes';
 
 const initialState = [
     {
@@ -16,29 +19,23 @@ const initialState = [
 ];
 
 
-export const addTodo = (todo) => ({
-    type: ADD_TODO,
-    todo,
-});
-
-export const deleteTodo = (id) => ({
-    type: DELETE_TODO,
-    id,
-})
-
-
 
 const reducer = (state = initialState, action) => {
    switch(action.type) {
        case ADD_TODO: {
-           const newState = [...state, action.todo];
-           console.log(newState);
-           return ( newState );
+           return [...state, action.todo];
+       }
+
+       case TOGGLE_TODO: {
+           return state.map(todo => {
+              return todo.id === action.id 
+                ? Object.assign({}, todo, todo.completed = !todo.completed) 
+                : todo;
+           })
        }
 
        case DELETE_TODO: {
-           console.log( action.id);
-           return state;
+            return state.filter( todo => todo.id !== action.id);
        }
        default: return state;
    }
