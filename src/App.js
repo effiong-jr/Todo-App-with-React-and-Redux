@@ -77,7 +77,7 @@ class App extends Component {
         <div key={todo.id} >
           {todo.completed ?
             <div className="todoItem" >
-              <span>
+              <span className="todo-text">
                   <FontAwesomeIcon icon={faCheck} className="markBtn" />
                   <del>{todo.text}</del>
               </span> 
@@ -92,7 +92,7 @@ class App extends Component {
             </div>
             
             : <div className="todoItem" >
-                  <span>{todo.text}</span>
+                  <span className="todo-text">{todo.text}</span>
                     <div className="actionBtns">
                       <Button 
                         handleClick={()=>this.toggleCompleted(todo.id)}

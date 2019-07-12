@@ -37,7 +37,7 @@
 }
 
 #inputForm input {
-  height: 35px;
+  height: 45px;
   width: 100%;
   border: 2px solid gray;
   border-top: 0;
@@ -88,9 +88,10 @@
 .todoItem {
   display: grid;
   grid-template-columns: 80% 20%;
-  margin: 0;
+  margin-bottom: 15px;
+  min-height: 50px;
   padding: 5px;
-  border-bottom: 1px solid gray;
+  box-shadow: 2px 3px 3px 2px gray;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 
 }
@@ -98,6 +99,11 @@
 .todoItem span {
   max-width: 100%;
   word-wrap: break-word;
+}
+
+.todo-text {
+  display: flex;
+  align-items: center;
 }
 
 .actionBtns {
