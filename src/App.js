@@ -20,7 +20,7 @@ class App extends Component {
     this.state = {
       input: "",
       // todoList: [],
-      id: 2,
+      id: 3,
     };
 
     this.handleChange = this.handleChange.bind(this);
