@@ -19,7 +19,6 @@ class App extends Component {
 
     this.state = {
       input: "",
-      // todoList: [],
       id: 3,
     };
 
@@ -54,16 +53,6 @@ class App extends Component {
 
   toggleCompleted(id) {
     store.dispatch(toggleTodo(id));
-    // const {todoList} = this.state;
-
-    // const getTodo = store.getState().filter(todo => todo.id === id)[0];
-    // getTodo.completed = !getTodo.completed;
-
-    // const updatedList = todoList.map( todo => {
-    //   return todo.id === getTodo.id ? getTodo : todo;
-    // });
-
-    // this.setState({todoList: updatedList});
   }
 
   handleDelete(id) {
@@ -81,50 +70,42 @@ class App extends Component {
                           icon={faTrashAlt}
                         />
 
-      // Check state of todo item
+      // Check completed status  of todo item
       // If completed, change button to an undo button
-      // Each todo has its own delete button
-     
-      if(todo.completed) {
-        return (
-          <div key={todo.id} >
-            <div  className="todoItem">
+      // Each todo has its own delete button     
+      return (
+        <div key={todo.id} >
+          {todo.completed ?
+            <div className="todoItem" >
               <span>
-                <FontAwesomeIcon icon={faCheck} className="markBtn" />
-                <del>{todo.text}</del></span>
-
+                  <FontAwesomeIcon icon={faCheck} className="markBtn" />
+                  <del>{todo.text}</del>
+              </span> 
               <div className="actionBtns">
-                <Button 
-                  handleClick={()=>this.toggleCompleted(todo.id)} 
-                  icon={faUndo}
-                  className="undoBtn"
-                />
-
-                {deleteBtn}
+                  <Button 
+                    handleClick={()=>this.toggleCompleted(todo.id)} 
+                    icon={faUndo}
+                    className="undoBtn"
+                  /> 
+                  {deleteBtn}
               </div>
             </div>
-
-          </div>
-        )
-      } else {
-        return (
-          <div key={todo.id}>
-            <div  className="todoItem">
-              <span>{todo.text}</span>
-              <div className="actionBtns">
-                <Button 
-                  handleClick={()=>this.toggleCompleted(todo.id)}
-                   icon={faCheckCircle}
-                   className="markBtn"
-                />
-
-                {deleteBtn}
-              </div>
+            
+            : <div className="todoItem" >
+                  <span>{todo.text}</span>
+                    <div className="actionBtns">
+                      <Button 
+                        handleClick={()=>this.toggleCompleted(todo.id)}
+                        icon={faCheckCircle}
+                        className="markBtn"
+                      />
+                      {deleteBtn}
+                  </div>
             </div>
-          </div>
-
-        )
-      }
+          }
+          {/* {deleteBtn} */}
+        </div>
+        );
     });
 
     const output = displayTodos.length === 0 
