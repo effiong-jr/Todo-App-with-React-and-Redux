@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import store from './store';
 import { addTodo, deleteTodo, toggleTodo } from './actionCreators';
+import { getTodos } from './selectors';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import { 
   faPlus, 
@@ -11,6 +11,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import './App.css';
 
+import { connect } from 'react-redux';
 
 
 class App extends Component {
@@ -38,13 +39,11 @@ class App extends Component {
     const {input, id} = this.state;
     
     if(input !== "") {
-      store.dispatch(
-        addTodo({
+      this.props.addTodo({
           id,
           text: input,
           completed: false,
-        })
-      )
+        });
 
       this.setState({ input: "", id: id + 1});
     }
@@ -52,18 +51,17 @@ class App extends Component {
   }
 
   toggleCompleted(id) {
-    store.dispatch(toggleTodo(id));
+    this.props.toggleTodo(id);
   }
 
   handleDelete(id) {
-    store.dispatch( deleteTodo(id) );
+    this.props.deleteTodo(id);
   }
 
   render() {
     const { input, } = this.state;
 
-
-    const displayTodos = store.getState().map( todo => {
+    const displayTodos = this.props.todos.map( todo => {
       const deleteBtn = <Button 
                           handleClick={()=>this.handleDelete(todo.id)}
                           className="deleteBtn"
@@ -160,4 +158,21 @@ function Button(props) {
   )
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    todos: getTodos(state),
+  }
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addTodo: (todo)=> dispatch(addTodo(todo)),
+    deleteTodo: (id )=> dispatch(deleteTodo(id)),
+    toggleTodo: (id) => dispatch( toggleTodo(id) ),
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(App);

@@ -1,0 +1,1 @@
+export const getTodos = store => store.map( todo => todo);
